@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpenseFlow - Modern Expense Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Authentication Section -->
+    <div id="auth-section" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>💰</h1>
+                <h1>ExpenseFlow</h1>
+                <p>Your personal finance companion</p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form">
+                <div id="login-error" class="error-message" style="display: none;"></div>
+                
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Enter your password" required>
+                </div>
+                <button type="button" class="btn-primary" onclick="loginUser()">Sign In</button>
+                
+                <div class="auth-switch">
+                    <p>Don't have an account?</p>
+                    <button type="button" onclick="showRegister()">Create Account</button>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form" class="auth-form" style="display: none;">
+                <div id="register-error" class="error-message" style="display: none;"></div>
+                <div id="register-success" class="success-message" style="display: none;"></div>
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" id="register-name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email Address</label>
+                    <input type="email" id="register-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" placeholder="Create a password (min 6 characters)" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm">Confirm Password</label>
+                    <input type="password" id="register-confirm" placeholder="Confirm your password" required>
+                </div>
+                <button type="button" class="btn-primary" onclick="registerUser()">Create Account</button>
+                
+                <div class="auth-switch">
+                    <p>Already have an account?</p>
+                    <button type="button" onclick="showLogin()">Sign In</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="main-app">
+        <div class="container">
+            <div class="header">
+                <div class="header-content">
+                    <h1>💰 ExpenseFlow</h1>
+                    <p>Track your expenses with style and simplicity</p>
+                </div>
+                
+                <div class="welcome-message" id="welcome-message">
+                    Welcome back! 
+                </div>
+                
+                <div class="header-controls">
+                    <div class="control-group">
+                        <span class="toggle-label">🌙 Dark Mode</span>
+                        <label class="theme-toggle">
+                            <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <!-- Add currency selector -->
+                    <div class="control-group">
+                        <span class="toggle-label">🌐 Currency</span>
+                        <select id="currencySelect" onchange="changeCurrency()" style="padding:8px 16px;border-radius:10px;">
+                            <option value="INR">₹ INR</option>
+                            <option value="USD">$ USD</option>
+                            <option value="EUR">€ EUR</option>
+                        </select>
+                    </div>
+                    <button class="export-btn" onclick="exportToCSV()">📊 Export CSV</button>
+                    <button class="logout-btn" onclick="logoutUser()">🚪 Logout</button>
+                </div>
+            </div>
+
+            <div class="nav-container">
+                <div class="nav-buttons">
+                    <button class="nav-btn active" onclick="showSection('dashboard', event)">🏠 Dashboard</button>
+                    <button class="nav-btn" onclick="showSection('add-expense', event)">➕ Add Expense</button>
+                    <button class="nav-btn" onclick="showSection('recent-expenses', event)">📋 Recent Expenses</button>
+                    <button class="nav-btn" onclick="showSection('spending-overview', event)">📊 Spending Overview</button>
+                    <button class="nav-btn" onclick="showSection('goals-challenges', event)">🎯 Goals</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section active">
+                <div class="dashboard">
+                    <div class="stats-card">
+                        <h3>Today Spent</h3>
+                        <div class="amount expense-amount" id="todayExpenses">₹0.00</div>
+                        <p class="subtitle">Today's expenses</p>
+                    </div>
+                    <div class="stats-card">
+                        <h3>Total Expenses</h3>
+                        <div class="amount expense-amount" id="totalExpenses">₹0.00</div>
+                        <p class="subtitle">This month</p>
+                    </div>
+                    <div class="stats-card">
+                        <h3>Monthly Budget</h3>
+                        <div class="amount income-amount" id="monthlyBudget">₹50,000.00</div>
+                        <p class="subtitle">Available</p>
+                    </div>
+                    <div class="stats-card">
+                        <h3>Remaining</h3>
+                        <div class="amount balance-amount" id="remaining">₹50,000.00</div>
+                        <p class="subtitle">This month</p>
+                    </div>
+                    <!-- Monthly Savings Goal -->
+                    <div class="stats-card">
+                        <h3>Monthly Savings Goal</h3>
+                        <div class="amount" id="dashboardMonthlyGoal">₹0.00</div>
+                        <p class="subtitle">Your set goal</p>
+                    </div>
+                    <!-- Daily Expense Limit -->
+                    <div class="stats-card">
+                        <h3>Daily Expense Limit</h3>
+                        <div class="amount" id="dashboardDailyLimit">₹0.00</div>
+                        <p class="subtitle">Your daily cap</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Expense Section -->
+            <div id="add-expense" class="content-section">
+                <h2 class="section-title">➕ Add New Expense</h2>
+                <!-- Add buttons to toggle forms -->
+                <div style="display:flex;gap:15px;justify-content:center;margin-bottom:25px;">
+                    <button id="showBudgetBtn" class="btn-primary" type="button" style="width:auto;" onclick="showBudgetForm()">Add/Update Budget</button>
+                    <button id="showExpenseBtn" class="btn-primary" type="button" style="width:auto;" onclick="showExpenseForm()">Add Expense</button>
+                </div>
+                <div class="success-message" id="successMessage" style="display: none;">
+                    ✅ Expense added successfully!
+                </div>
+                <!-- Budget Form -->
+                <div id="budgetForm" style="display:none;">
+                    <div class="expense-form">
+                        <div class="budget-section">
+                            <h3>💰 Monthly Budget</h3>
+                            <div class="form-group" style="margin-bottom: 10px;">
+                                <label for="budgetAmount">Set Monthly Budget (₹)</label>
+                                <input type="number" id="budgetAmount" step="0.01" placeholder="50000.00">
+                                <button type="button" class="update-budget-btn" onclick="updateBudget()">Update Budget</button>
+                            </div>
+                            <p style="color: #7f8c8d; font-size: 0.9rem; margin: 5px 0 0 0;">Current Budget: ₹<span id="currentBudgetDisplay">50,000.00</span></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Expense Form -->
+                <div id="expenseForm">
+                    <div class="expense-form">
+                        <div class="form-group">
+                            <label for="amount">Amount (₹)</label>
+                            <input type="number" id="amount" step="0.01" required placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" required>
+                                <option value="">Select category</option>
+                                <option value="food">🍽 Food & Dining</option>
+                                <option value="transport">🚗 Transportation</option>
+                                <option value="shopping">🛍 Shopping</option>
+                                <option value="entertainment">🎬 Entertainment</option>
+                                <option value="bills">💡 Bills & Utilities</option>
+                                <option value="health">🏥 Healthcare</option>
+                                <option value="education">📚 Education</option>
+                                <option value="travel">✈ Travel</option>
+                                <option value="other">📝 Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" id="description" required placeholder="What did you spend on?">
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <button type="button" class="btn-primary" onclick="addExpense()">Add Expense</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Expenses Section -->
+            <div id="recent-expenses" class="content-section">
+                <div class="expenses-header">
+                    <h2 class="section-title">📋 Recent Expenses</h2>
+                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <div class="control-group">
+                            <label for="dateFilter" style="color: #333; font-weight: 600; margin-right: 10px;">Select Date:</label>
+                            <input type="date" id="dateFilter" onchange="filterExpensesByDate()" style="padding: 8px 12px; border: 2px solid #e1e8ed; border-radius: 10px; font-size: 1rem;">
+                            <button onclick="clearDateFilter()" style="margin-left: 10px; padding: 8px 16px; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">Show All</button>
+                        </div>
+                        <div class="filter-tabs">
+                            <button class="tab-btn active" onclick="filterExpenses('all')">All</button>
+                            <button class="tab-btn" onclick="filterExpenses('food')">Food</button>
+                            <button class="tab-btn" onclick="filterExpenses('transport')">Transport</button>
+                            <button class="tab-btn" onclick="filterExpenses('shopping')">Shopping</button>
+                            <button class="tab-btn" onclick="filterExpenses('entertainment')">Entertainment</button>
+                            <button class="tab-btn" onclick="filterExpenses('bills')">Bills</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="expensesList">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <h3>No expenses yet</h3>
+                        <p>Add your first expense to get started!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spending Overview Section -->
+            <div id="spending-overview" class="content-section">
+                <h2 class="section-title">📊 Spending Overview</h2>
+                <div class="chart-container">
+                    <div style="text-align:center; margin-bottom:20px;">
+                        <button id="btnCategoryBreakdown" class="btn-primary" style="width:auto;display:inline-block;margin-right:10px;" onclick="showChart('category')">Category Breakdown</button>
+                        <button id="btnMonthlyComparison" class="btn-primary" style="width:auto;display:inline-block;" onclick="showChart('monthly')">Monthly Comparison</button>
+                    </div>
+                    <div class="chart-wrapper" id="categoryChartWrapper">
+                        <canvas id="spendingChart" width="600" height="400"></canvas>
+                    </div>
+                    <div class="chart-wrapper" id="monthlyChartWrapper" style="display:none;">
+                        <canvas id="monthlyBarChart" width="600" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals & Challenges Section -->
+            <div id="goals-challenges" class="content-section">
+                <h2 class="section-title">🎯 Goals </h2>
+                <div class="expense-form" style="max-width:400px;margin:0 auto;">
+                    <div class="form-group">
+                        <label for="goalAmount">Set Monthly Savings Goal</label>
+                        <input type="number" id="goalAmount" step="0.01" placeholder="10000.00">
+                        <button type="button" class="update-budget-btn" onclick="updateGoal()">Set Goal</button>
+                    </div>
+                    <p style="color: #7f8c8d; font-size: 1rem; margin: 10px 0 0 0;">
+                        Current Goal: <span id="currentGoalDisplay">None</span>
+                    </p>
+                    <!-- Daily Expense Limit -->
+                    <div class="form-group" style="margin-top:20px;">
+                        <label for="dailyLimit">Set Daily Expense Limit</label>
+                        <input type="number" id="dailyLimit" step="0.01" placeholder="2000.00">
+                        <button type="button" class="update-budget-btn" onclick="updateDailyLimit()">Set Daily Limit</button>
+                    </div>
+                    <p style="color: #7f8c8d; font-size: 1rem; margin: 10px 0 0 0;">
+                        Daily Limit: <span id="currentDailyLimitDisplay">None</span>
+                    </p>
+                    <div id="dailyLimitNotification" style="margin-top:10px;color:#e74c3c;font-weight:bold;display:none;"></div>
+                    <!-- Milestones & Rewards -->
+                    <div id="milestoneRewards" style="margin-top:30px;">
+                        <h3 style="font-size:1.2rem;color:#2980b9;margin-bottom:10px;">🏅 Milestones & Rewards</h3>
+                        <div id="milestoneBadges" style="display:flex;gap:10px;flex-wrap:wrap;"></div>
+                        <div id="milestonePoints" style="margin-top:10px;font-size:1rem;color:#27ae60;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Expense Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏ Edit Expense</h2>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            
+            <div class="expense-form">
+                <div class="form-group">
+                    <label for="editAmount">Amount (₹)</label>
+                    <input type="number" id="editAmount" step="0.01" required placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="editCategory">Category</label>
+                    <select id="editCategory" required>
+                        <option value="">Select category</option>
+                        <option value="food">🍽 Food & Dining</option>
+                        <option value="transport">🚗 Transportation</option>
+                        <option value="shopping">🛍 Shopping</option>
+                        <option value="entertainment">🎬 Entertainment</option>
+                        <option value="bills">💡 Bills & Utilities</option>
+                        <option value="health">🏥 Healthcare</option>
+                        <option value="education">📚 Education</option>
+                        <option value="travel">✈ Travel</option>
+                        <option value="other">📝 Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <input type="text" id="editDescription" required placeholder="What did you spend on?">
+                </div>
+                <div class="form-group">
+                    <label for="editDate">Date</label>
+                    <input type="date" id="editDate" required>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+                    <button type="button" class="btn-primary" onclick="saveExpenseChanges()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
