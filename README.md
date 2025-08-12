@@ -175,34 +175,20 @@ Modify `styles.css` to customize:
 - Animation timings
 - Typography
 
-## 📱 Browser Compatibility
-
-- ✅ Chrome 60+
-- ✅ Firefox 55+
-- ✅ Safari 12+
-- ✅ Edge 79+
-- ✅ Mobile browsers
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
+Contributions are always welcome! If you spot a bug, have an idea for improvement, or want to add a new feature, feel free to open an issue or submit a pull request. Suggestions for documentation updates, translations, or performance enhancements are also appreciated. Every contribution, big or small, helps improve the project for everyone.
 
 ## 🙏 Acknowledgments
 
-- Built with vanilla web technologies
+- Special thanks to AI tools for providing guidance, suggestions, and inspiration during the development of this project.
 - Inspired by modern financial apps
 - Designed for simplicity and usability
 
 ---
 
 **Happy Expense Tracking! 💰✨**
+
 
 *Built with ❤️ using HTML, CSS, and JavaScript* 
