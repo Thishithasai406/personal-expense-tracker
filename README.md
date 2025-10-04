@@ -3,6 +3,9 @@
 A beautiful, feature-rich personal expense tracking web application built with vanilla HTML, CSS, and JavaScript. Track your expenses, set budgets, visualize spending patterns, and achieve your financial goals with style!
 
 ## 🚀 Live Demo
+
+Check out the demo video here: [Watch Video](https://youtu.be/yvQ2HcSeF2M)
+
 [Click here to view project](https://thishithasai406.github.io/personal-expense-tracker/)
 
 
@@ -196,4 +199,5 @@ Contributions are always welcome! If you spot a bug, have an idea for improvemen
 
 
 *Built with ❤️ using HTML, CSS, and JavaScript* 
+
 
